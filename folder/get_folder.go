@@ -2,12 +2,18 @@ package folder
 
 import (
 	"fmt"
+	"slices"
+	"strings"
 
 	"github.com/gofrs/uuid"
 )
 
 func GetAllFolders() []Folder {
 	return GetSampleData()
+}
+
+func (f *driver) GetAllFolders() []Folder {
+	return f.folders
 }
 
 func (f *driver) GetFoldersByOrgID(orgID uuid.UUID) []Folder {
@@ -24,6 +30,30 @@ func (f *driver) GetFoldersByOrgID(orgID uuid.UUID) []Folder {
 
 }
 
+// returns Folder object from its name
+//
+// Time Complexity: O(N*M) where
+// N = number of folders
+// M = largest number of parents a folder has
+// assuming O(1) string comparison
+func (f *driver) GetFolderFromName(name string) Folder {
+	folders := f.folders
+
+	for _, f := range folders {
+		directories := strings.Split(f.Paths, ".")
+		if slices.Contains(directories, name) {
+			return f
+		}
+	}
+
+	return Folder{}
+}
+
+// error handler for GetAllChildFolders method
+//
+// Time Complexity: O(N+N+N) -> O(N) where
+// N = number of folders
+// assuming O(1) string comparison
 func (f *driver) GetAllChildFoldersErrorHandler(orgID uuid.UUID, name string) error {
 	if !f.CheckFolderExists(name) {
 		return fmt.Errorf("Error: Folder does not exist")
@@ -36,10 +66,11 @@ func (f *driver) GetAllChildFoldersErrorHandler(orgID uuid.UUID, name string) er
 }
 
 // gets child folders by iteratively checking if name exists in one of the parent directories
-// solution has a complexity of O(N*M) where
+//
+// Time Complexity: O(N+N+(N*M)) -> O(N*M) where
 // N = number of folders
 // M = largest number of parents a folder has
-// assuming O(1) string comparison complexity
+// assuming O(1) string comparison
 func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) []Folder {
 
 	err := f.GetAllChildFoldersErrorHandler(orgID, name)
@@ -55,7 +86,7 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) []Folder {
 
 	// iterates through every folder which belongs to orgID
 	for _, f := range folders {
-		// splits directory string into individual folder name tokens until a folder matches name
+		// checks if name is a parent of current folder f
 		if IsParentOf(name, f) {
 			res = append(res, f)
 		}
