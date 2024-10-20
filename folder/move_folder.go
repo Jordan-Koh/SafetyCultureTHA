@@ -42,7 +42,7 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 		return []Folder{}, err
 	}
 
-	folders := f.GetAllFolders()
+	folders := f.folders
 
 	old_parent := f.GetFolderFromName(name)
 	old_parent_path := old_parent.Paths[:len(old_parent.Paths)-len(old_parent.Name)-1]

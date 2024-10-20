@@ -12,10 +12,6 @@ func GetAllFolders() []Folder {
 	return GetSampleData()
 }
 
-func (f *driver) GetAllFolders() []Folder {
-	return f.folders
-}
-
 func (f *driver) GetFoldersByOrgID(orgID uuid.UUID) []Folder {
 	folders := f.folders
 
@@ -76,7 +72,7 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) []Folder {
 	err := f.GetAllChildFoldersErrorHandler(orgID, name)
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		return []Folder{}
 	}
 
 	// gets all folders that has OrgID = orgID
