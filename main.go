@@ -24,18 +24,31 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/georgechieng-sc/interns-2022/folder"
 
 	"github.com/gofrs/uuid"
 )
 
 func main() {
-	orgID := uuid.FromStringOrNil(folder.DefaultOrgID)
+	fmt.Println("hi")
+	fmt.Println(folder.IsParentOf(
+		"whack",
+		folder.Folder{
+			Name:  "name",
+			OrgId: uuid.FromStringOrNil("id"),
+			Paths: "this.is.my.name",
+		},
+	))
+	fmt.Println("bye")
 
-	res := folder.GetAllFolders()
+	// orgID := uuid.FromStringOrNil(folder.DefaultOrgID)
 
-	folderDriver := folder.NewDriver(res)
-	childFolders := folderDriver.GetAllChildFolders(orgID, "proper-grim-reaper")
+	// res := folder.GetAllFolders()
 
-	folder.PrettyPrint(childFolders)
+	// folderDriver := folder.NewDriver(res)
+	// childFolders := folderDriver.GetAllChildFolders(orgID, "magnetic-sinister-six")
+
+	// folder.PrettyPrint(childFolders)
 }
