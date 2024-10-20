@@ -26,7 +26,13 @@ type driver struct {
 	// data structure to store folders
 	// or preprocessed data
 
-	// example: feel free to change the data structure, if slice is not what you want
+	// data structure was kept as a slice as changing could result in compatibility issues regarding the testing of data
+
+	// the second option was to use a tree like structure so that operations involving moving and identifying child directories would have an improved best case complexity
+
+	// the final option i could think of was by using a two way linked tree like structure with a hashmap for O(1) access to any node.
+	// the final option would result in O(1) lookup and move operations; and O(n) for identifying all child directories of any given folder
+
 	folders []Folder
 }
 
