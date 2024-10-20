@@ -35,7 +35,7 @@ func main() {
 	res := folder.GetAllFolders()
 
 	folderDriver := folder.NewDriver(res)
-	childFolders := folderDriver.GetAllChildFolders(orgID, "secret")
+	childFolders := folderDriver.GetAllChildFolders(orgID, "proper-grim-reaper")
 
 	folder.PrettyPrint(childFolders)
 }
